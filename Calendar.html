@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <style>
+        @media screen and (orientation: portrait) {
+            .arts {
+                width: 80vw;
+                height: 80vw;
+            }
+        }
+
+        @media screen and (orientation: landscape) {
+            .arts {
+                width: 80vh;
+                height: 80vh;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .modal-xl {
+                width: 90vw;
+                max-width: 1200px;
+            }
+        }
+
+        .modalarts {
+            width: 230px;
+            height: 230px;
+        }
+    </style>
+</head>
+
+<body class="bg-dark">
+    <div ng-app="myApp" ng-controller="myCtrl">
+        <!-- <nav class="navbar navbar-light bg-info">
+            <a class="navbar-brand" href="#">
+                <img src="images/navbar.jpg" width="30" height="30" alt="">
+            </a>
+        </nav> -->
+        <div class="d-flex flex-column align-items-center">
+            <div class="d-flex">
+                <button type="button" class="btn m-1 btn-outline-light" ng-repeat="num in dates track by $index"
+                    ng-class="{'btn-secondary': num == separator}"
+                    ng-click="num != separator ? toggleToday() : openModal()">{{num}}</button>
+                <!-- <button type="button" class="btn btn-light m-1 btn-sm" data-toggle="modal"
+                    data-target="#allModal">&cong;</button> -->
+            </div>
+            <div class="d-flex">
+                <button type="button" class="btn btn-outline-warning m-1 weekAlp btn-lg" ng-repeat="week in weeks"
+                    ng-click="togglePic(week, $index)"
+                    ng-class="{active: $index == weekIndex}">{{week.weekLetter}}</button>
+                <!--  -->
+                <!-- &cong; -->
+                <!-- &there4; -->
+            </div>
+            <div class="d-flex mt-2">
+                <img class="img-fluid img-thumbnail arts" ng-src="{{weekPath}}" alt="{{weekPath}}" />
+            </div>
+        </div>
+        <div class="modal fade" id="allModal" tabindex="-1">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content">
+                    <!-- <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Every Day</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div> -->
+                    <div class="modal-body" style="overflow-y: auto; max-height: 80vh;">
+                        <div class="d-flex flex-wrap">
+                            <img class="img-fluid img-thumbnail modalarts" ng-repeat="num in order"
+                                ng-src="{{weeks[num].weekPath}}" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+
+<script>
+    var app = angular.module('myApp', []);
+    app.controller('myCtrl', function ($scope) {
+        $scope.name = "ArtWork";
+        $scope.order = [2, 0, 3, 5, 6, 1, 4];
+        $scope.separator = "#";
+        $scope.weeks = [{ "weekName": "0_Sun", "weekLetter": "S", "weekPath": "https://i.ibb.co/hgKYWFk/0-Sun.jpg" },
+        { "weekName": "1_Mon", "weekLetter": "M", "weekPath": "https://i.ibb.co/10bd2T9/1-Mon.jpg" },
+        { "weekName": "2_Tue", "weekLetter": "T", "weekPath": "https://i.ibb.co/1zQNSm6/2-Tue.jpg" },
+        { "weekName": "3_Wed", "weekLetter": "W", "weekPath": "https://i.ibb.co/wBPdr4c/3-Wed.jpg" },
+        { "weekName": "4_Thu", "weekLetter": "T", "weekPath": "https://i.ibb.co/ccScnN0/4-Thu.jpg" },
+        { "weekName": "5_Fri", "weekLetter": "F", "weekPath": "https://i.ibb.co/s5Js4mg/5-Fri.jpg" },
+        { "weekName": "6_Sat", "weekLetter": "S", "weekPath": "https://i.ibb.co/FspR8Kx/6-Sat.jpg" }];
+        $scope.months = [{ "monNum": "01", "monName": "Jan" }, { "monNum": "02", "monName": "Feb" }, { "monNum": "03", "monName": "Mar" }, { "monNum": "04", "monName": "Apr" }, { "monNum": "05", "monName": "May" }, { "monNum": "06", "monName": "Jun" }, { "monNum": "07", "monName": "Jul" }, { "monNum": "08", "monName": "Aug" }, { "monNum": "09", "monName": "Sep" }, { "monNum": "10", "monName": "Oct" }, { "monNum": "11", "monName": "Nov" }, { "monNum": "12", "monName": "Dec" }];
+
+        var date = new Date();
+        var day = date.getDate().toString();
+        var mon = $scope.months[date.getMonth()].monNum;
+        var year = date.getFullYear().toString();
+        $scope.dates = [day[0], day[1], $scope.separator, mon[0], mon[1], $scope.separator, year[0], year[1], year[2], year[3]];
+
+        //Functions
+        $scope.togglePic = function (week, index) { $scope.weekPath = week.weekPath; $scope.weekIndex = index; };
+        $scope.toggleToday = function () { $scope.togglePic($scope.weeks[date.getDay()], date.getDay()); };
+        $scope.openModal = function () { $('#allModal').modal('show') };
+        $scope.toggleToday();
+    });
+
+</script>
+
+</html>
+<!--
+https://i.ibb.co/hgKYWFk/0-Sun.jpg
+https://i.ibb.co/10bd2T9/1-Mon.jpg
+https://i.ibb.co/1zQNSm6/2-Tue.jpg
+https://i.ibb.co/wBPdr4c/3-Wed.jpg
+https://i.ibb.co/ccScnN0/4-Thu.jpg
+https://i.ibb.co/s5Js4mg/5-Fri.jpg
+https://i.ibb.co/FspR8Kx/6-Sat.jpg
+-->
